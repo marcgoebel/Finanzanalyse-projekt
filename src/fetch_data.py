@@ -8,16 +8,23 @@ def fetch_yahoo_data(ticker: str, start="2023-01-01", end="2024-12-31"):
     """
     data = yf.download(ticker, start=start, end=end)
 
-    # 🔥 Stelle sicher, dass der Ordner "data/" existiert
+    # 🔥 Explizit prüfen, ob das Verzeichnis existiert, und es anlegen
     data_folder = "data"
-    if not os.path.exists(data_folder):
-        os.makedirs(data_folder)  # Ordner erstellen, falls er nicht existiert
-        print(f"✅ Ordner '{data_folder}' wurde erstellt!")
 
-    # CSV speichern
+    try:
+        os.makedirs(data_folder, exist_ok=True)
+        print(f"✅ Ordner '{data_folder}' wurde erfolgreich erstellt oder existiert bereits.")
+    except Exception as e:
+        print(f"❌ Fehler beim Erstellen des Ordners '{data_folder}': {e}")
+
+    # Speichern als CSV
     csv_path = os.path.join(data_folder, f"{ticker}_data.csv")
-    data.to_csv(csv_path)
-    print(f"✅ Daten gespeichert unter: {csv_path}")
+
+    try:
+        data.to_csv(csv_path)
+        print(f"✅ Daten gespeichert unter: {csv_path}")
+    except Exception as e:
+        print(f"❌ Fehler beim Speichern der Datei: {e}")
 
     return data
 
