@@ -1,5 +1,3 @@
-# src/fetch_data.py
-
 import yfinance as yf
 import pandas as pd
 import os
@@ -10,14 +8,15 @@ def fetch_yahoo_data(ticker: str, start="2023-01-01", end="2024-12-31"):
     """
     data = yf.download(ticker, start=start, end=end)
 
-    # Ordner erstellen, falls er nicht existiert
-    data_folder = "data"
-    os.makedirs(data_folder, exist_ok=True)
+    # 🔥 Korrekte Pfadstruktur setzen (data liegt in src/)
+    data_folder = os.path.join("src", "data")  # Setze den Ordner innerhalb von src/
+    os.makedirs(data_folder, exist_ok=True)  # 🔥 Erstelle Ordner, falls er nicht existiert
 
     # Speichern als CSV
-    csv_path = f"{data_folder}/{ticker}_data.csv"
+    csv_path = os.path.join(data_folder, f"{ticker}_data.csv")
     data.to_csv(csv_path)
-    print(f"Daten gespeichert unter: {csv_path}")
+    print(f"✅ Daten gespeichert unter: {csv_path}")
+
     return data
 
 if __name__ == "__main__":
