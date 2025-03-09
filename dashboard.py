@@ -17,19 +17,14 @@ if not os.path.exists(data_path):
     df.to_csv(data_path, index=False)
     st.success("✅ Daten erfolgreich geladen!")
 
-# CSV einlesen – richtige Header-Zeile setzen
-df = pd.read_csv(data_path, skiprows=3)  # Erste drei Zeilen überspringen
+# CSV einlesen – jetzt explizit Header setzen!
+column_names = ["Date", "Open", "High", "Low", "Close", "Adj Close", "Volume"]
+df = pd.read_csv(data_path, skiprows=3, names=column_names)
 
 # Prüfen, ob die richtigen Spalten geladen wurden
 st.write("📊 Verfügbare Spalten:", df.columns.tolist())
 
-# Falls "Close" nicht existiert, alternative Namen suchen
-if "Close" not in df.columns:
-    for col in df.columns:
-        if "close" in col.lower():
-            df.rename(columns={col: "Close"}, inplace=True)
-
-# Sicherstellen, dass "Close" jetzt existiert
+# Sicherstellen, dass "Close" existiert
 if "Close" in df.columns:
     st.subheader(f"Aktienkurs von {ticker} über die Zeit")
     st.line_chart(df["Close"])
