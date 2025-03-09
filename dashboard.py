@@ -17,13 +17,18 @@ if not os.path.exists(data_path):
     df.to_csv(data_path, index=False)
     st.success("✅ Daten erfolgreich geladen!")
 
-# CSV einlesen (mit korrektem Header)
-df = pd.read_csv(data_path, header=1)  # Versuche, die zweite Zeile als Header zu nehmen
+# CSV einlesen – richtige Zeile als Header setzen
+df = pd.read_csv(data_path, skiprows=2)  # Erste zwei Zeilen überspringen
 
-# Prüfen, ob die richtigen Spalten geladen wurden
+# Sicherstellen, dass "Date" die Index-Spalte ist
+df.rename(columns={"Price": "Date"}, inplace=True)  
+df.set_index("Date", inplace=True)
+df.index = pd.to_datetime(df.index)  # Umwandlung zu Zeitformat
+
+# Prüfen, ob die Spalten richtig geladen wurden
 st.write("📊 Verfügbare Spalten:", df.columns.tolist())
 
-# Falls "Close" immer noch nicht existiert, alternative Namen suchen
+# Falls "Close" nicht existiert, alternativen Namen suchen
 if "Close" not in df.columns:
     for col in df.columns:
         if "close" in col.lower():
@@ -35,11 +40,6 @@ if "Close" in df.columns:
     st.line_chart(df["Close"])
 else:
     st.error("⚠️ Spalte 'Close' wurde nicht gefunden! Überprüfe die CSV-Datei.")
-
-# Datum setzen
-if "Date" in df.columns:
-    df.set_index("Date", inplace=True)
-    df.index = pd.to_datetime(df.index)
 
 # Tägliche Renditen anzeigen
 if "Close" in df.columns:
