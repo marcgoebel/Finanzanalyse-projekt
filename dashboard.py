@@ -17,13 +17,13 @@ if not os.path.exists(data_path):
     df.to_csv(data_path, index=False)
     st.success("✅ Daten erfolgreich geladen!")
 
-# CSV einlesen mit Header in der ersten Zeile
-df = pd.read_csv(data_path, skiprows=1, header=0)  # Skippe 1 Zeile und setze den Header richtig
+# CSV einlesen (mit korrektem Header)
+df = pd.read_csv(data_path, header=1)  # Versuche, die zweite Zeile als Header zu nehmen
 
-# Spalten ausgeben, um zu prüfen
+# Prüfen, ob die richtigen Spalten geladen wurden
 st.write("📊 Verfügbare Spalten:", df.columns.tolist())
 
-# Prüfen, ob "Close" existiert – falls nicht, richtigen Namen suchen
+# Falls "Close" immer noch nicht existiert, alternative Namen suchen
 if "Close" not in df.columns:
     for col in df.columns:
         if "close" in col.lower():
