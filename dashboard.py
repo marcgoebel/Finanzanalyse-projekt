@@ -4,7 +4,8 @@ import os
 from src.fetch_data import fetch_yahoo_data  # Falls Daten fehlen
 
 # Titel des Dashboards
-st.title("📈 Finanzdaten Dashboard")
+st.set_page_config(page_title="Finanzanalyse Dashboard", page_icon="📈")
+
 
 # Aktien-Ticker
 ticker = "AAPL"
