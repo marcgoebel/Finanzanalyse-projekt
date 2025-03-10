@@ -44,4 +44,6 @@ jobs:
           git remote set-url origin git@github.com:${{ github.repository }}.git
           git add data/*.csv
           git commit -m "Automatisches Update der Finanzdaten" || echo "Keine neuen Änderungen"
-          git push origin main
+          git push git@github.com:${{ github.repository }}.git main
+
+
